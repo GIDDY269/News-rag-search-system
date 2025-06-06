@@ -5,11 +5,11 @@ import bytewax.operators as op
 from bytewax.outputs import DynamicSink
 from bytewax.connectors.kafka import KafkaSource
 
-from src.consumer import process_messages, build_kafka_source
-from src.embedding import TextEmbedder
-from src.config.pydantic_models import ChuckedDocument, EmbedDocument, RefinedDocument
-from src.utils.logger import setup_logger
-from src.vector_database import QdrantVectorOutput
+from consumer import process_messages, build_kafka_source
+from embedding import TextEmbedder
+from config.pydantic_models import ChuckedDocument, EmbedDocument, RefinedDocument
+from utils.logger import setup_logger
+from vector_database import QdrantVectorOutput
 
 
 

@@ -7,8 +7,8 @@ from typing import Optional, Union
 import numpy as np
 from transformers import AutoTokenizer, AutoModel
 
-from src.config.setting import Settings
-from src.utils.logger import setup_logger
+from config.setting import Settings
+from utils.logger import setup_logger
 
 
 logger = setup_logger()

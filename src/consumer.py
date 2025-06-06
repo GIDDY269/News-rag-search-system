@@ -6,9 +6,9 @@ from bytewax.connectors.kafka import KafkaSinkMessage, KafkaSource
 
 
 
-from src.utils.logger import setup_logger
-from src.config.setting import Settings
-from src.config.pydantic_models import BaseDocument
+from utils.logger import setup_logger
+from config.setting import Settings
+from config.pydantic_models import BaseDocument
 
 
 logger = setup_logger()

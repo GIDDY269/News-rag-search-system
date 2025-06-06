@@ -44,5 +44,5 @@ def fetch_theverge_articles(url: str) -> Dict[str,Any]:
 
 
 
-if __name__ == '__main__':
-    fetch_theverge_articles("https://www.theverge.com/rss/index.xml")
+#if __name__ == '__main__':
+ #   fetch_theverge_articles("https://www.theverge.com/rss/index.xml")

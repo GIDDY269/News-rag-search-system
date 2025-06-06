@@ -5,9 +5,9 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import  Distance,PointStruct
 
 
-from src.config.setting import Settings
-from src.utils.logger import setup_logger
-from src.config.pydantic_models import EmbedDocument
+from config.setting import Settings
+from utils.logger import setup_logger
+from config.pydantic_models import EmbedDocument
 
 
 settings = Settings()

@@ -2,9 +2,9 @@ import os
 import sys
 import streamlit as st 
 from qdrant_client import QdrantClient
-from src.embedding import TextEmbedder
-from src.config.setting import Settings
-from src.utils.data_clean import clean_full
+from embedding import TextEmbedder
+from config.setting import Settings
+from utils.data_clean import clean_full
 from langchain_core.output_parsers import JsonOutputParser
 from jinja2 import environment,FileSystemLoader
 from typing import List, Dict, Any,Optional
@@ -47,9 +47,11 @@ def query_vectordatabase(query: str):
     results = qdrant.query_points(
         collection_name=settings.QDRANT_COLLECTION_NAME,
         query=embed_query,
-        limit=10,
+        limit=3,
         with_payload=True
     )
+
+    
 
 
     return [
@@ -60,7 +62,7 @@ def query_vectordatabase(query: str):
             "date": res.payload["published_at"],
             "original": res.payload["url"],
         }
-        for res in results
+        for res in results.points
     ]
     
 
@@ -71,8 +73,10 @@ def generate_summary(query: str) -> str:
 
 
     content = query_vectordatabase(query)
-    prompt_template = get_prompt('summarize_news_articles.jinja')
-    prompt = prompt_template.render(query=query, content=content)
+    print(content)
+    docu = [doc['content'] for doc in content]
+    prompt_template = get_prompt('summary_prompt.j2')
+    prompt = prompt_template.render(query=query, documents=docu)
 
     llm = ChatGroq(model=settings.GROQ_MODEL_ID,api_key=settings.GROQ_API_KEY, temperature=0.1)
     message = [
@@ -117,7 +121,7 @@ def display_articles(articles):
                 image = download_and_resize_image(article["image"])
                 with cols[col]:
                     if image:
-                        st.image(image, use_column_width=True, clamp=True, width=200)
+                        st.image(image, use_container_width=True, clamp=True, width=50)
                     st.caption(
                         f"Score: {(100 * article['score']):.2f}% : {article['date']} "
                     )
@@ -132,6 +136,11 @@ def display_articles(articles):
                                     </a>"""
                     st.markdown(button_html, unsafe_allow_html=True)
             st.divider()
+
+
+
+
+
 
 
 def on_text_enter():
@@ -153,15 +162,6 @@ def on_text_enter():
 question = st.text_input("What's new?:", key="question", on_change=on_text_enter)
 
 
-
-
-
-
-
-
-if __name__ == '__main__':
-    result  = query_vectordatabase('massive sahara dust cloud sweeps caribbean heads towards us gulf coast')
-    print(result)
 
 
 

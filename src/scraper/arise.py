@@ -45,5 +45,5 @@ def fetch_arise_articles(url: str) -> Dict[str,Any]:
 
 
 
-if __name__ == '__main__':
-    fetch_arise_articles("https://www.arise.tv/feed/")
+#if __name__ == '__main__':
+ #   fetch_arise_articles("https://www.arise.tv/feed/")

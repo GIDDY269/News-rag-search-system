@@ -4,10 +4,10 @@ import time
 import fire
 from typing import Callable,List,NoReturn
 from confluent_kafka import Producer
-from src.utils.logger import setup_logger
-from src.fetch_news import NewsFetcher
-from src.config.pydantic_models import BaseDocument
-from src.config.setting import Settings
+from utils.logger import setup_logger
+from fetch_news import NewsFetcher
+from config.pydantic_models import BaseDocument
+from config.setting import Settings
 from dotenv import load_dotenv
 load_dotenv()
 

@@ -7,14 +7,13 @@ from typing import Callable, List, Any
 from newsapi import NewsApiClient
 from newsdataapi import NewsDataApiClient
 from pydantic import ValidationError
-from src.config.setting import Settings
-from src.utils.logger import setup_logger
-from src.config.pydantic_models import *
-
-from src.scraper.techcrunch import fetch_techcrunch_articles
-from src.scraper.theverge import fetch_theverge_articles
-from src.scraper.channelstv import fetch_channel_articles
-from src.scraper.arise import fetch_arise_articles
+from config.setting import Settings
+from utils.logger import setup_logger
+from config.pydantic_models import *
+from scraper.techcrunch import fetch_techcrunch_articles
+from scraper.theverge import fetch_theverge_articles
+from scraper.channelstv import fetch_channel_articles
+from scraper.arise import fetch_arise_articles
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -129,7 +128,7 @@ class NewsFetcher:
     @property
     def sources(self) -> List[callable] :
         '''List of news fetching functions'''
-        return [self.fetch_from_newsapi,self.fetch_from_newsdataapi,
+        return [#self.fetch_from_newsapi,#self.fetch_from_newsdataapi,
                 self.fetch_from_techcrunch,self.fetch_from_theverge,
                 self.fetch_from_channelstv,self.fetch_from_arise]
 

@@ -11,9 +11,9 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from unstructured.staging.huggingface import chunk_by_attention_window
 
 
-from src.utils.logger import setup_logger
-from src.utils.data_clean import clean_full, remove_html_tags, normalize_whitespace
-from src.embedding import TextEmbedder
+from utils.logger import setup_logger
+from utils.data_clean import clean_full, remove_html_tags, normalize_whitespace
+from embedding import TextEmbedder
 
 
 logger = setup_logger()

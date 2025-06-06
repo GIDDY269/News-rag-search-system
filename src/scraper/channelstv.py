@@ -2,6 +2,7 @@ import feedparser
 from typing import Dict, Any
 from bs4 import BeautifulSoup
 import hashlib
+from utils.data_clean import clean_full
 
 def extract_image_url(content):
     html = content[0]['value']  # get the HTML string
@@ -43,5 +44,6 @@ def fetch_channel_articles(url: str) -> Dict[str,Any]:
 
         
 
-if __name__ == '__main__':
-    fetch_channel_articles("https://www.channelstv.com/feed/")
+#if __name__ == '__main__':
+ #   result = fetch_channel_articles("https://www.channelstv.com/feed/")
+  #  print(f'content with cleaning : {result}')

@@ -46,5 +46,5 @@ def fetch_techcrunch_articles(url: str) -> Dict[str,Any]:
 
 
 
-if __name__ == '__main__':
-    fetch_techcrunch_articles("https://techcrunch.com/feed/")
+#if __name__ == '__main__':
+ #   fetch_techcrunch_articles("https://techcrunch.com/feed/")

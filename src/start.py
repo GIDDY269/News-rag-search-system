@@ -1,4 +1,4 @@
-from src.flow import build as build_flow
+from flow import build as build_flow
 from bytewax.testing import run_main
 
 
