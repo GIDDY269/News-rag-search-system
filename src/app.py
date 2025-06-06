@@ -52,8 +52,6 @@ def query_vectordatabase(query: str):
     )
 
     
-
-
     return [
         {   'content': clean_full(res.payload['content']),
             "score": res.score,
@@ -105,8 +103,8 @@ def download_and_resize_image(url):
 
 
 
-
 def display_articles(articles):
+    st.subheader('NEWS SOURCES')
     if articles:
         results_placeholder.empty()
         n_cols = 2
@@ -118,10 +116,12 @@ def display_articles(articles):
                 if index >= len(articles):
                     break
                 article = articles[index]
-                image = download_and_resize_image(article["image"])
+                #image = download_and_resize_image(article["image"])
                 with cols[col]:
-                    if image:
-                        st.image(image, use_container_width=True, clamp=True, width=50)
+                    #if image:
+                     #   st.image(image, use_container_width=True, clamp=True, width=50)
+
+                    
                     st.caption(
                         f"Score: {(100 * article['score']):.2f}% : {article['date']} "
                     )
@@ -136,12 +136,6 @@ def display_articles(articles):
                                     </a>"""
                     st.markdown(button_html, unsafe_allow_html=True)
             st.divider()
-
-
-
-
-
-
 
 def on_text_enter():
     question = st.session_state.question
@@ -160,15 +154,5 @@ def on_text_enter():
 
 
 question = st.text_input("What's new?:", key="question", on_change=on_text_enter)
-
-
-
-
-
-
-
-
-
-
 
 
