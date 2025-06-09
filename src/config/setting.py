@@ -40,6 +40,7 @@ class Settings(BaseSettings):
     THEVERGE_URL : str = 'https://www.theverge.com/rss/index.xml'
     CHANNELSTV_URL : str = 'https://www.channelstv.com/feed/'
     ARISE_URL : str = 'https://www.arise.tv/feed/'
+    ARTS_URL : str = "https://feeds.arstechnica.com/arstechnica/index"
 
 
     GROQ_API_KEY: str

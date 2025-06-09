@@ -47,7 +47,7 @@ def query_vectordatabase(query: str):
     results = qdrant.query_points(
         collection_name=settings.QDRANT_COLLECTION_NAME,
         query=embed_query,
-        limit=3,
+        limit=5,
         with_payload=True
     )
 
@@ -82,7 +82,11 @@ def generate_summary(query: str) -> str:
         ("human", query)
     ]
 
-    return llm.invoke(message).content
+    for chunk in llm.stream(message):
+        if chunk.content:
+            yield chunk.content
+
+    #return llm.invoke(message).content
 
 
 

@@ -14,6 +14,7 @@ from scraper.techcrunch import fetch_techcrunch_articles
 from scraper.theverge import fetch_theverge_articles
 from scraper.channelstv import fetch_channel_articles
 from scraper.arise import fetch_arise_articles
+from scraper.arts_tech import fetch_art_tech_articles
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -125,10 +126,17 @@ class NewsFetcher:
         return [AriseModel(**article).to_base()
                 for article in fetch_arise_articles(settings.ARISE_URL)]
     
+
+    @handle_article_fetcing
+    def fetch_from_art(self) -> List[Dict]:
+        '''fetch news from arise'''
+        return [ArtsModel(**article).to_base()
+                for article in fetch_art_tech_articles(settings.ARTS_URL)]
+    
     @property
     def sources(self) -> List[callable] :
         '''List of news fetching functions'''
         return [#self.fetch_from_newsapi,#self.fetch_from_newsdataapi,
                 self.fetch_from_techcrunch,self.fetch_from_theverge,
-                self.fetch_from_channelstv,self.fetch_from_arise]
+                self.fetch_from_channelstv,self.fetch_from_arise,fetch_art_tech_articles]
 

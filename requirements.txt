@@ -21,3 +21,4 @@ beautifulsoup4
 selenium
 feedparser
 langchain-groq
+supervisor

@@ -392,3 +392,30 @@ class AriseModel(BaseModel):
             description = self.summary,
             author = self.author#", ".join(self.creator) if self.creator else None
         )
+    
+class ArtsModel(BaseModel):
+    ''''pydantic model for the news data api '''
+
+    id : str
+    title : str
+    link : str
+    image_url : Optional[str]
+    summary : Optional[str]
+    published : str
+    source : Optional[str]
+    author : Optional[Union[str,list[str]]]
+    content :   Optional[str]
+
+    def to_base(self) -> BaseDocument:
+        '''Convert the thevergemodel to a CommonDocument object'''
+        return BaseDocument(
+            article_id = self.id,
+            title = self.title,
+            url = self.link,
+            image_url = self.image_url,
+            published_at=self.published,
+            source_name = self.source or 'Unknown',
+            content = self.content,
+            description = self.summary,
+            author = self.author#", ".join(self.creator) if self.creator else None
+        )
