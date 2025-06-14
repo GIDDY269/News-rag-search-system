@@ -32,7 +32,9 @@ def get_prompt(filename: str) -> str:
     '''
     Load the prompt template from the given file path.
     '''
-    env  = environment.Environment(loader=FileSystemLoader('src\prompts'))
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # This is /app/src
+    PROMPT_DIR = os.path.join(BASE_DIR, "prompts")         # This is /app/src/prompts
+    env  = environment.Environment(loader=FileSystemLoader(PROMPT_DIR))
     Template = env.get_template(filename)
     return Template
 
