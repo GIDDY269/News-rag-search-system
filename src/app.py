@@ -49,7 +49,7 @@ def query_vectordatabase(query: str):
     results = qdrant.query_points(
         collection_name=settings.QDRANT_COLLECTION_NAME,
         query=embed_query,
-        limit=5,
+        limit=8,
         with_payload=True
     )
 
