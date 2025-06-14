@@ -33,7 +33,7 @@ class QdrantVectorSink(StatelessSinkPartition):
             self._client.create_collection(
                     collection_name=collection_name,
                     vectors_config={
-                        "size": settings.EMBEDDING_MODEL_MAX_INPUT_LENGTH,
+                        "size": settings.GOOGLE_VECTOR_SIZE,
                         "distance": Distance.COSINE
                     }
                 )
@@ -81,7 +81,7 @@ class QdrantVectorOutput(DynamicSink):
 
     def __init__(
             self,
-            vector_size:int = settings.EMBEDDING_MODEL_MAX_INPUT_LENGTH,
+            vector_size:int = settings.GOOGLE_VECTOR_SIZE,
             collection_name: str = settings.QDRANT_COLLECTION_NAME,
             client: Optional[QdrantClient] = None   
             ):

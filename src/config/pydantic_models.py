@@ -13,10 +13,13 @@ from unstructured.staging.huggingface import chunk_by_attention_window
 
 from utils.logger import setup_logger
 from utils.data_clean import clean_full, remove_html_tags, normalize_whitespace
-from embedding import TextEmbedder
+from embedding import GoogleTextEmbedder
+from config.setting import Settings
 
 
 logger = setup_logger()
+settings  = Settings()
+
 
 class DocumentSource(BaseModel):
     id : Optional[str]
@@ -47,7 +50,7 @@ class RefinedDocument(BaseModel):
             'author': base.author
         }
 
-        \
+        
         return refined
 
 class ChuckedDocument(BaseModel):
@@ -61,10 +64,10 @@ class ChuckedDocument(BaseModel):
 
 
     @classmethod
-    def from_refined(cls, refined_doc: RefinedDocument,embedding_model:TextEmbedder) -> list['ChuckedDocument']:
+    def from_refined(cls, refined_doc: RefinedDocument,embedding_model:GoogleTextEmbedder) -> list['ChuckedDocument']:
 
-        chunks = ChuckedDocument.chunkenize(
-            refined_doc.full_text, embedding_model
+        chunks = ChuckedDocument._chunkenize(
+            refined_doc.full_text, #embedding_model
         )
 
         return [
@@ -79,8 +82,19 @@ class ChuckedDocument(BaseModel):
             for chunk in chunks
         ]
     
+    
+    
     @staticmethod
-    def chunkenize(text: str, embedding_model:TextEmbedder) -> list[str]:
+    def _chunkenize(text: str,Max_tokens: int=settings.GOOGLE_CHUNCK_MAX_INPUT_LENGTH,
+                    overlap: int = settings.GOOGLE_CHUNCK_OVERLAP) -> list[str]:
+
+        splitter = RecursiveCharacterTextSplitter()
+        chunks = splitter.split_text(text=text)
+        
+        return chunks
+    
+    @staticmethod
+    def chunkenize(text: str, embedding_model:GoogleTextEmbedder) -> list[str]:
 
         splitter = RecursiveCharacterTextSplitter()
         text_sections = splitter.split_text(text=text)
@@ -102,19 +116,22 @@ class EmbedDocument(BaseModel):
     metadata : Dict[str, Union[str,Any]] = {}
 
 
+
+
+
     @classmethod
     def from_chunked(cls, chunked_doc: ChuckedDocument, 
-                     embedding_model:TextEmbedder) -> 'EmbedDocument':
+                     embedding_model:GoogleTextEmbedder) -> 'EmbedDocument':
         
         return cls(
             doc_id = chunked_doc.doc_id,
             chunk_id = chunked_doc.chunk_id,
             full_raw_text = chunked_doc.full_raw_text,
             text = chunked_doc.text,
-            embedding = embedding_model(chunked_doc.text,to_list=True),
+            embedding = embedding_model(chunked_doc.text),
             metadata = chunked_doc.metadata
         )
-    
+        
     def to_payload(self) -> tuple[str , List[float],dict]:
         '''Convert the EmbedDocument to a tuple of (doc_id, embedding, metadata)'''
         return (

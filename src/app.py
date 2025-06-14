@@ -2,7 +2,7 @@ import os
 import sys
 import streamlit as st 
 from qdrant_client import QdrantClient
-from embedding import TextEmbedder
+from embedding import GoogleTextEmbedder
 from config.setting import Settings
 from utils.data_clean import clean_full
 from langchain_core.output_parsers import JsonOutputParser
@@ -42,8 +42,8 @@ def query_vectordatabase(query: str):
     Search for news articles in the Qdrant database using the query.
     '''
 
-    embedder  = TextEmbedder()
-    embed_query = embedder(query,to_list=True)
+    embedder  = GoogleTextEmbedder()
+    embed_query = embedder(query)
     results = qdrant.query_points(
         collection_name=settings.QDRANT_COLLECTION_NAME,
         query=embed_query,

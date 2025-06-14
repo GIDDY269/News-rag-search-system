@@ -23,6 +23,13 @@ class Settings(BaseSettings):
     FETCH_WAIT_WINDOW: int = 3600  # seconds (30 minutes)
 
 
+    GOOGLE_EMBEDDING_MODEL :str = "models/text-embedding-004" #(8192)
+    GOOGLE_API_KEY :str
+    GOOGLE_CHUNCK_MAX_INPUT_LENGTH : int = 2000
+    GOOGLE_CHUNCK_OVERLAP: int = 200
+    GOOGLE_VECTOR_SIZE : int = 768
+
+
     EMBEDDING_MODEL_ID: str = "sentence-transformers/all-MiniLM-L6-v2"
     EMBEDDING_MODEL_MAX_INPUT_LENGTH: int = 384
     EMBEDDING_MODEL_DEVICE: str = "cpu"

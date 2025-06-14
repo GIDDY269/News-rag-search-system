@@ -8,7 +8,6 @@ newsapi-python
 requests
 transformers 
 fire
-torch
 langchain
 pydantic-settings 
 sentence-transformers 
@@ -22,3 +21,4 @@ selenium
 feedparser
 langchain-groq
 supervisor
+google-generativeai

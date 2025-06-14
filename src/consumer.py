@@ -47,7 +47,6 @@ def process_messages(messages: KafkaSinkMessage) -> List[BaseDocument]:
         logger.info(f"Received message from Kafka: {type(json_str)}")
         data = json.loads(json_str)
         
-        logger.info(f"Decoded JSON data: ({len(data)}")
         doc = BaseDocument.from_json(data) # convert to basedocument
         documents.append(doc)
         logger.info(f"Processed {len(documents)} messages from Kafka.")
