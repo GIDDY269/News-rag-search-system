@@ -138,5 +138,5 @@ class NewsFetcher:
         '''List of news fetching functions'''
         return [#self.fetch_from_newsapi,#self.fetch_from_newsdataapi,
                 self.fetch_from_techcrunch,self.fetch_from_theverge,
-                self.fetch_from_channelstv,self.fetch_from_arise,fetch_art_tech_articles]
+                self.fetch_from_channelstv,self.fetch_from_arise,self.fetch_from_art]
 
