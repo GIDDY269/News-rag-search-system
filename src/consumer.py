@@ -20,7 +20,7 @@ def build_kafka_source() -> KafkaSource:
     
     kafka_config = {
         "bootstrap.servers" : settings.KAFKA_BOOTSTRAP_SERVERS,
-        "auto.offset.reset" : "lastest",  # Start consuming from the new message
+        "auto.offset.reset" : "latest",  # Start consuming from the new message
         "security.protocol" : settings.KAFKA_SECURITY_PROTOCOL,
         "sasl.mechanism" : settings.KAFKA_SASL_MECHANISM,
         "sasl.username" : settings.KAFKA_USERNAME,

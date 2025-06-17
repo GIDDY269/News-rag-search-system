@@ -6,11 +6,9 @@ bytewax
 newsdataapi 
 newsapi-python 
 requests
-transformers 
 fire
 langchain
 pydantic-settings 
-sentence-transformers 
 streamlit
 pytest 
 faker

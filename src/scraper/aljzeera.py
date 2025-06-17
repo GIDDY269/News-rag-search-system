@@ -5,7 +5,7 @@ from typing import Dict, Any
 import hashlib
 
 
-def fetch_techcrunch_articles(url: str) -> Dict[str,Any]:
+def fetch_bbcsport_articles(url: str) -> Dict[str,Any]:
 
     """
     Fetch news articles from techcrunch AI section 
@@ -26,25 +26,30 @@ def fetch_techcrunch_articles(url: str) -> Dict[str,Any]:
             'summary': entry.summary,
             'content': '',
             'author' : entry.author if 'author' in entry else 'Unknown',
-            'source' : 'techcrunch',
+            'source' : 'bbcsport',
         }
 
         # Fetch the full content of the article
-        response = requests.get(entry.link)
+        try:
+            response = requests.get(entry.link)
+            if response.status_code == 200:
         
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.content, 'html.parser')
-            for paragraph in soup.find('div',class_="article-body-commercial-selector article-body-viewer-selector dcr-11jq3zt").find_all('p'):
-                article['content'] += paragraph.get_text() + '\n'
+                soup = BeautifulSoup(response.content, 'html.parser')
+                rs = soup.find('div',class_="ssrcss-1o5p6v2-RichTextContainer e5tfeyi1").find_all('p')
+                for paragraph in rs:
+                    article['content'] += paragraph.get_text() + '\n'
 
-                
+                    
 
-        result.append(article)
+            result.append(article)
+        except Exception as e:
+             print(f"Parsing error for {entry.link}: {e}")
+             article['content']  = ''    
         
     return result
 
 
 
 if __name__ == '__main__':
-    res = fetch_techcrunch_articles("https://www.theguardian.com/uk/rss")
+    res = fetch_bbcsport_articles("https://feeds.bbci.co.uk/sport/football/rss.xml")
     print(res)

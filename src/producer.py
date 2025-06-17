@@ -41,7 +41,7 @@ class KafkaProducerThread(threading.Thread):
         self.producer = producer # use the shared producer instance
         self.topic = topic
         self.fetch_function = fetch_function
-        self.wait_window_sec = settings.FETCH_WAIT_WINDOW # adjust the wait time as needed
+        #self.wait_window_sec = settings.FETCH_WAIT_WINDOW # adjust the wait time as needed
         self.running = threading.Event()
         self.running.set()
 
@@ -58,36 +58,37 @@ class KafkaProducerThread(threading.Thread):
     def run(self) -> NoReturn:
         '''Continuously fetch data and produce messages to Kafka topic.'''
         logger.info(f'{self.producer_id} started.')
-        while self.running.is_set():
-            try:
-                messages: List[BaseDocument] = self.fetch_function()
-                logger.info(f'{self.producer_id} fetched {len(messages)} messages.')
-                if messages:
-                    messages_payload = [msg.to_kafka_payload() for msg in messages]
-                    for message in messages_payload:
-                        message = json.dumps(message).encode('utf-8')
-                        self.producer.produce(self.topic,value=message,callback=self.delivery_callback)
-                        
-                    self.producer.poll(0)
-                    self.producer.flush()
+        
+        try:
+            messages: List[BaseDocument] = self.fetch_function()
+            logger.info(f'{self.producer_id} fetched {len(messages)} messages.')
+            if messages:
+                messages_payload = [msg.to_kafka_payload() for msg in messages]
+                for message in messages_payload:
+                    message = json.dumps(message).encode('utf-8')
+                    self.producer.produce(self.topic,value=message,callback=self.delivery_callback)
                     
-                logger.info(
-                    f'producer : {self.producer_id} sent : {len(messages)} msgs.'
-                )
-
-                logger.info(f'{self.producer_id} sleeping for {self.wait_window_sec / 60} minutes.')
-                time.sleep(self.wait_window_sec) # wait for the next fetch
+                self.producer.poll(0)
+                self.producer.flush()
                 
-            except Exception as e:
-                logger.error(f'Error in producer worker {self.producer_id}: {e}')
-                self.running.clear() # stop the thread error
+            logger.info(
+                f'producer : {self.producer_id} sent : {len(messages)} msgs.'
+            )
+            #logger.info(f'{self.producer_id} sleeping for {self.wait_window_sec / 60} minutes.')
+        
+            #time.sleep(self.wait_window_sec) # wait for the next fetch
+            
+        except Exception as e:
+            logger.error(f'Error in producer worker {self.producer_id}: {e}')
+            self.running.clear() # stop the thread error
 
     def stop(self) -> None:
         '''Signals the thread to stop running and cloases the kafka Producer'''
 
         self.running.clear()
-        self.producer.close()
+        #self.producer.close()
         self.join()
+
 
 class KafkaProducerSwarm:
     '''Manages the swarm of KafkaProducerThread instances for concurrent data 
@@ -116,10 +117,14 @@ class KafkaProducerSwarm:
         for thread in self.producer_threads:
             thread.stop()
             logger.info(f'{thread.producer_id} stopped.')
+        logger.info('All producer threads stopped.')
+    
+    def join_all(self) -> None:
+        '''Waits for all producer threads to complete.'''
         for thread in self.producer_threads:
             thread.join()
             logger.info(f'{thread.producer_id} joined.')
-        logger.info('All producer threads stopped.')
+        logger.info('All producer threads completed their run.')
 
 
 
@@ -151,11 +156,11 @@ def main():
 
     try:
         multi_producer.start()
-        while True:
-            time.sleep(1)
+        
+        multi_producer.join_all() # ensures all thread complete their ru
     finally:
         multi_producer.stop()
-        producer.close()
+        logger.info("Kafka producer process completed.")
 
 if __name__ == "__main__":
     fire.Fire(main)
