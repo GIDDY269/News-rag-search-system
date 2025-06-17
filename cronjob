@@ -1,1 +1,1 @@
-*/5 * * * * root python /app/src/producer.py 
+*/5 * * * * python /app/src/producer.py 
