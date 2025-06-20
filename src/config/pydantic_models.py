@@ -8,7 +8,6 @@ import json
 
 from dateutil import parser
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from unstructured.staging.huggingface import chunk_by_attention_window
 
 
 from utils.logger import setup_logger
@@ -93,18 +92,7 @@ class ChuckedDocument(BaseModel):
         
         return chunks
     
-    @staticmethod
-    def chunkenize(text: str, embedding_model:GoogleTextEmbedder) -> list[str]:
-
-        splitter = RecursiveCharacterTextSplitter()
-        text_sections = splitter.split_text(text=text)
-        chucks = []
-        for text_section in text_sections:
-            chucks.extend(
-                chunk_by_attention_window(text_section,embedding_model.tokenizer)
-            )
-            
-        return chucks
+    
     
 
 class EmbedDocument(BaseModel):

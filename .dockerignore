@@ -1,0 +1,65 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+env/
+ENV/
+venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Test and dev-only files
+tests/
+*.test.py
+*.spec.py
+
+# Model files and datasets
+*.pth
+*.pt
+*.ckpt
+*.joblib
+*.pkl
+*.npz
+*.h5
+models/
+data/
+datasets/
+
+# Transformers/Huggingface/model caches
+.cache/
+huggingface/
+transformers_cache/
+sentence_transformers/
+~/.cache/
+~/.local/
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+*.bak
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Docker artifacts
+Dockerfile~
+docker-compose.yml~
+*.tar
+*.gz
+*.zip
+
+# Git files
+.git/
+.gitignore
+
+# OS metadata
+.DS_Store
+Thumbs.db

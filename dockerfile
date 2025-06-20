@@ -1,13 +1,23 @@
-FROM python:3.10-slim
+FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
-
-RUN apt-get update && apt-get install -y cron && apt-get clean
-
 COPY requirements.txt . 
-RUN pip install --no-cache-dir -r requirements.txt --verbose
+RUN pip install --no-cache-dir -r requirements.txt
 
+
+
+# stage 2
+
+FROM python:3.12-slim
+
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y cron && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /usr/local /usr/local
 
 COPY src/ ./src/
 
@@ -22,4 +32,4 @@ RUN chmod 0644 /etc/cron.d/cronjob && \
 
 EXPOSE 8500
 
-CMD [ "supervisord" , "-c","supervisord.conf"]
+CMD ["/usr/local/bin/supervisord", "-n", "-c", "/app/supervisord.conf"]

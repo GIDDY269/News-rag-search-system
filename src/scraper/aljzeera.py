@@ -37,14 +37,17 @@ def fetch_bbcsport_articles(url: str) -> Dict[str,Any]:
                 soup = BeautifulSoup(response.content, 'html.parser')
                 rs = soup.find('div',class_="ssrcss-1o5p6v2-RichTextContainer e5tfeyi1").find_all('p')
                 for paragraph in rs:
-                    article['content'] += paragraph.get_text() + '\n'
+                    if paragraph:
+                        article['content'] += paragraph.get_text() + '\n'
+                    else:
+                        article['content']  = ''  
 
                     
 
             result.append(article)
         except Exception as e:
-             print(f"Parsing error for {entry.link}: {e}")
-             article['content']  = ''    
+            print(f"Parsing error for {entry.link}: {e}")
+      
         
     return result
 

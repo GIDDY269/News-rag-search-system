@@ -1,7 +1,6 @@
 confluent-kafka
 python-dotenv 
 pydantic
-unstructured 
 bytewax
 newsdataapi 
 newsapi-python 
@@ -15,7 +14,6 @@ faker
 qdrant-client
 pymongo
 beautifulsoup4
-selenium
 feedparser
 langchain-groq
 supervisor
