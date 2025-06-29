@@ -1,5 +1,5 @@
 ## 📰 Real-Time News Search App (RAG-Based)
-![System Diagram](images\gen_ai_real_time_feature_pipeline_fe7720ad38.png)
+![System Diagram](images/gen_ai_real_time_feature_pipeline_fe7720ad38.png)
 
 
 ### Overview
