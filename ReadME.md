@@ -1,5 +1,6 @@
-## 📰 Real-Time News Search App (RAG-Based)
-![System Diagram](images/gen_ai_real_time_feature_pipeline_fe7720ad38.png)
+## 📰 Real-Time News Search App (RAG-Based) [SEE APP UI](https://news-rag-search-system.onrender.com/)
+
+![RAG Pipeline Architecture](images/gen_ai_real_time_feature_pipeline_fe7720ad38.png)
 
 
 ### Overview
