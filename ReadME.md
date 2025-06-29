@@ -1,4 +1,6 @@
 ## 📰 Real-Time News Search App (RAG-Based)
+![System Diagram](images\gen_ai_real_time_feature_pipeline_fe7720ad38.png)
+
 
 ### Overview
 This project is a real-time news search application that delivers factual, up-to-date answers using a Retrieval Augmented Generation (RAG) approach.
