@@ -25,7 +25,7 @@ class GoogleTextEmbedder():
 
     def __call__(self,text:str ,task_type:str='RETRIEVAL_DOCUMENT') -> list[float] :
         """"Generates an embedding for the given text using Google's embedding model"""
-
+        logger.info('Generating embedding for text using Google Generative AI')
         try:
             response = genai.embed_content(
                 model = self._model_id,
