@@ -70,8 +70,7 @@ I built this with a focus on scalability, accuracy, and real-world performance u
 
 ## 🚀 Possible Future Upgrades
 
-* Add more news APIs for broader coverage  
-* Build a web UI for easier interaction  
+* Add more news RSS for broader coverage  
 * Include sentiment analysis for each news article  
 * Summarize individual articles  
 * Let users define their own news interests for personalization  

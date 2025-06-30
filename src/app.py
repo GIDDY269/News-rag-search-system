@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 import streamlit as st 
 from qdrant_client import QdrantClient
 from embedding import GoogleTextEmbedder
@@ -61,8 +62,9 @@ def query_vectordatabase(query: str):
             "image": res.payload["image_url"],
             "date": res.payload["published_at"],
             "original": res.payload["url"],
+            "source_num" : i + 1
         }
-        for res in results.points
+        for i, res in enumerate(results.points)
     ]
     
 
@@ -74,7 +76,7 @@ def generate_summary(query: str) -> str:
 
     content = query_vectordatabase(query)
     print(content)
-    docu = [doc['content'] for doc in content]
+    docu = [{"content":doc['content'],"source_num" : doc['source_num']} for doc in content]
     prompt_template = get_prompt('summary_prompt.j2')
     prompt = prompt_template.render(query=query, documents=docu)
 
@@ -86,79 +88,47 @@ def generate_summary(query: str) -> str:
 
     for chunk in llm.stream(message):
         if chunk.content:
-            yield chunk.content
+            yield chunk.content,content
 
-    #return llm.invoke(message).content
+    
 
+def link_citations(text,source_map):
+    def repl(match):
+        num = match.group(1)
+        url = source_map.get(int(num), "#")
+        return f'<a href="{url}" target="_blank">[{num}]</a>'
+    return re.sub(r'\[(\d+)\]', repl, text)
 
-
-results_placeholder = st.empty()
-
-
-def download_and_resize_image(url):
-    try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            img = Image.open(BytesIO(response.content))
-            resized_img = img.resize((200, 300))
-            return resized_img
-        else:
-            st.error("Failed to download image.")
-    except Exception as e:
-        st.error(f"Error downloading image: {e}")
+def extract_used_citations(text: str) -> set:
+    return set(map(int, re.findall(r'\[(\d+)\]', text)))
 
 
 
-def display_articles(articles):
-    st.subheader('NEWS SOURCES')
-    if articles:
-        results_placeholder.empty()
-        n_cols = 2
-        n_rows = (len(articles) + n_cols - 1) // n_cols
-        for row in range(n_rows):
-            cols = st.columns(n_cols)
-            for col in range(n_cols):
-                index = row * n_cols + col
-                if index >= len(articles):
-                    break
-                article = articles[index]
-                #image = download_and_resize_image(article["image"])
-                with cols[col]:
-                    #if image:
-                     #   st.image(image, use_container_width=True, clamp=True, width=50)
+query = st.text_input("Ask something about current news")
 
-                    
-                    st.caption(
-                        f"Score: {(100 * article['score']):.2f}% : {article['date']} "
-                    )
-                    st.subheader(article["title"])
-                    url = article["original"]
-                    button_html = f"""<a href="{url}" target="_blank">
-                                        <button style="color: white; background-color: #4CAF50; border: none; padding: 10px 24px; 
-                                        text-align: center; text-decoration: none; display: inline-block; font-size: 16px; 
-                                        margin: 4px 2px; cursor: pointer; border-radius: 12px;">
-                                            See More
-                                        </button>
-                                    </a>"""
-                    st.markdown(button_html, unsafe_allow_html=True)
-            st.divider()
+if query:
+    response_stream = generate_summary(query)
 
-def on_text_enter():
-    question = st.session_state.question
-    question = clean_full(question)
-    if question:
-        articles = query_vectordatabase(question)
-        if articles:
-            st.session_state.question = question
-            results_placeholder.write(f"Found {len(articles)} articles for your query.")
-            summary = generate_summary(question)
-            st.write("Summary:")
-            st.write(summary)
-        else:
-            results_placeholder.write("No articles found for your query.")
-        display_articles(articles)
+    final_output = ""
+    source_links = {}
+
+    with st.spinner("Generating answer..."):
+        for chunk, sources in response_stream:
+            final_output += chunk
+            source_links = {doc["source_num"]: [doc["original"],doc['title']] for doc in sources}
+
+    st.subheader("🧠 Answer")
+    st.markdown(link_citations(final_output, source_links), unsafe_allow_html=True)
 
 
-question = st.text_input("What's new?:", key="question", on_change=on_text_enter)
+
+    st.subheader("🔗 Sources")
+    used_citations = extract_used_citations(final_output)
+    # Filter the sources accordingly
+    filtered_sources = {
+        num: ls for num, ls in source_links.items() if num in used_citations
+        }
+    for num, ls in filtered_sources.items():
+        st.markdown(f"[{num}]: [{ls[1]}]({ls[0]})", unsafe_allow_html=True)
 
 
