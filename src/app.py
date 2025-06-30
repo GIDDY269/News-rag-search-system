@@ -6,13 +6,9 @@ from qdrant_client import QdrantClient
 from embedding import GoogleTextEmbedder
 from config.setting import Settings
 from utils.data_clean import clean_full
-from langchain_core.output_parsers import JsonOutputParser
 from jinja2 import environment,FileSystemLoader
-from typing import List, Dict, Any,Optional
 from langchain_groq import ChatGroq
-import requests
-from io import BytesIO
-from PIL import Image
+
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -24,7 +20,7 @@ settings = Settings()
 qdrant = QdrantClient(settings.QDRANT_ENDPOINT,
                       api_key=settings.QDRANT_API_KEY,)
 
-st.title('News Search Engine AND SUMMARIZER')
+st.title('News Search Engine And Summarizer')
 
 st.write('This is a real-time RAG system that allows you to search for news articles and get summaries.')
 
@@ -93,6 +89,8 @@ def generate_summary(query: str) -> str:
     
 
 def link_citations(text,source_map):
+    '''Replace inline citations in the text with clickable links.
+    '''
     def repl(match):
         num = match.group(1)
         url = source_map.get(int(num), "#")
