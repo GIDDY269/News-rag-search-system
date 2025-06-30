@@ -10,8 +10,8 @@ It solves the common problem of LLM hallucinations by grounding responses in act
 
 I built this with a focus on scalability, accuracy, and real-world performance using Dockerized components and Jinja for prompt versioning.
 
-![APP](images/images/Screenshot.png)
-![APPRESULTS](images/Screenshot_result.png)
+![APP](images/Screenshot.png)
+![APPRESULTS](images/result.png)
 
 ## 🔑 Key Features
 
