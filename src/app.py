@@ -93,8 +93,11 @@ def link_citations(text,source_map):
     '''
     def repl(match):
         num = match.group(1)
-        url = source_map.get(int(num), "#")
-        return f'<a href="{url}" target="_blank">[{num}]</a>'
+        source = source_map.get(int(num), {"url": "#", "title": ""})
+        url = source["url"]
+        title = source["title"]
+
+        return f'<a href="{url}" title="{title}" target="_blank">[{num}]</a>'
     return re.sub(r'\[(\d+)\]', repl, text)
 
 def extract_used_citations(text: str) -> set:
@@ -113,7 +116,10 @@ if query:
     with st.spinner("Generating answer..."):
         for chunk, sources in response_stream:
             final_output += chunk
-            source_links = {doc["source_num"]: [doc["original"],doc['title']] for doc in sources}
+            source_links = {doc["source_num"]: 
+                            {'url' : doc["original"],
+                             'title': doc['title']} 
+                             for doc in sources}
 
     st.subheader("🧠 Answer")
     st.markdown(link_citations(final_output, source_links), unsafe_allow_html=True)
@@ -127,6 +133,6 @@ if query:
         num: ls for num, ls in source_links.items() if num in used_citations
         }
     for num, ls in filtered_sources.items():
-        st.markdown(f"[{num}]: [{ls[1]}]({ls[0]})", unsafe_allow_html=True)
+        st.markdown(f"[{num}]: [{ls['title']}]({ls['url']})", unsafe_allow_html=True)
 
 
