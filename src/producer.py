@@ -26,7 +26,6 @@ class KafkaProducerThread(threading.Thread):
         topic (str): The Kafka topic to which messages will be produced.
         fetch_function (Callable): Function to fetch data to be sent to Kafka.
         producer (KafkaProducer): Kafka producer instance.
-        wait_window_sec (int): Time to wait between message production in seconds.
         running (bool): Control flag for the running state of the thread.
     '''
 
@@ -41,7 +40,6 @@ class KafkaProducerThread(threading.Thread):
         self.producer = producer # use the shared producer instance
         self.topic = topic
         self.fetch_function = fetch_function
-        #self.wait_window_sec = settings.FETCH_WAIT_WINDOW # adjust the wait time as needed
         self.running = threading.Event()
         self.running.set()
 

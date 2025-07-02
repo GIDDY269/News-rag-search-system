@@ -5,7 +5,9 @@ from typing import Dict, Any
 import hashlib
 
 
-def fetch_techcrunch_articles(url: str) -> Dict[str,Any]:
+
+
+def fetch_cbs_articles(url: str) -> Dict[str,Any]:
 
     """
     Fetch news articles from cbs sports soccer section
@@ -47,5 +49,5 @@ def fetch_techcrunch_articles(url: str) -> Dict[str,Any]:
 
 
 
-if __name__ == '__main__':
-    fetch_techcrunch_articles("https://www.cbssports.com/rss/headlines/soccer/")
+#if __name__ == '__main__':
+ #   fetch_cbs_articles("https://www.cbssports.com/rss/headlines/soccer/")

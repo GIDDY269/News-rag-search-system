@@ -215,67 +215,6 @@ class BaseDocument(BaseModel):
 
 
 
-
-class NewsAPIModel(BaseModel):
-
-    '''
-    pydantic model for news api
-    '''
-
-    source :  DocumentSource
-    author : Optional[str]
-    title : str
-    description : Optional[str]
-    url : str
-    urlToImage : Optional[str]
-    publishedAt : str
-    content : Optional[str]
-
-    def to_base(self) -> BaseDocument:
-        '''Convert the NewsAPIModel to a CommonDocument object'''
-        return BaseDocument(
-    
-            title = self.title,
-            url = self.url,
-            published_at=self.publishedAt,
-            image_url=self.urlToImage,
-            source_name=self.source.name,
-            article_id = str(uuid4()),
-            content = self.content,
-            description = self.description,
-            author = self.author
-            )
-    
-
-class NewDataioModel(BaseModel):
-    ''''pydantic model for the news data api '''
-
-    article_id : str
-    title : str
-    link : str
-    description : Optional[str]
-    pubDate : str
-    source_id : Optional[str]
-    source_url : Optional[str]
-    source_icon : Optional[str]
-    creator : Optional[list[str]]
-    image_url : Optional[str]
-    content :   Optional[str]
-
-    def to_base(self) -> BaseDocument:
-        '''Convert the NewDataioModel to a CommonDocument object'''
-        return BaseDocument(
-            article_id = self.article_id,
-            title = self.title,
-            url = self.link,
-            published_at=self.pubDate,
-            image_url=self.image_url,
-            source_name = self.source_id or 'Unknown',
-            content = self.content,
-            description = self.description,
-            author = self.creator#", ".join(self.creator) if self.creator else None
-        )
-
 class RealDataNewsModel(BaseModel):
     '''Pydantic model for the RealDataNews API'''
 
@@ -430,6 +369,32 @@ class ArtsModel(BaseModel):
             title = self.title,
             url = self.link,
             image_url = self.image_url,
+            published_at=self.published,
+            source_name = self.source or 'Unknown',
+            content = self.content,
+            description = self.summary,
+            author = self.author#", ".join(self.creator) if self.creator else None
+        )
+
+
+class CbsModel(BaseModel):
+    ''''pydantic model for the news data api '''
+
+    id : str
+    title : str
+    link : str
+    summary : Optional[str]
+    published : str
+    source : Optional[str]
+    author : Optional[Union[str,list[str]]]
+    content :   Optional[str]
+
+    def to_base(self) -> BaseDocument:
+        '''Convert the thevergemodel to a CommonDocument object'''
+        return BaseDocument(
+            article_id = self.id,
+            title = self.title,
+            url = self.link,
             published_at=self.published,
             source_name = self.source or 'Unknown',
             content = self.content,

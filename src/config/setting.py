@@ -48,6 +48,7 @@ class Settings(BaseSettings):
     CHANNELSTV_URL : str = 'https://www.channelstv.com/feed/'
     ARISE_URL : str = 'https://www.arise.tv/feed/'
     ARTS_URL : str = "https://feeds.arstechnica.com/arstechnica/index"
+    CBS_URL : str = "https://www.cbssports.com/rss/headlines/soccer/"
 
 
     GROQ_API_KEY: str

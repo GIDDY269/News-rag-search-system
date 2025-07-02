@@ -15,6 +15,7 @@ from scraper.theverge import fetch_theverge_articles
 from scraper.channelstv import fetch_channel_articles
 from scraper.arise import fetch_arise_articles
 from scraper.arts_tech import fetch_art_tech_articles
+from scraper.cbssport import fetch_cbs_articles
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -62,45 +63,7 @@ class NewsFetcher:
     A class to fetch news articles from different sources'''
 
     def __init__(self):
-        self._newsapi = NewsApiClient(api_key=settings.NEWSAPI_KEY)
-        self._newsdataapi = NewsDataApiClient(apikey=settings.NEWSDATAIO_KEY)
-        self._time_window = 24
-
-
-    @handle_article_fetcing
-    def fetch_from_newsapi(self) -> List[dict]:
-        '''fetch top headlies from Newsapi'''
-
-        response = self._newsapi.get_everything(
-            q=settings.NEWS_TOPIC,
-            language='en',
-            page = settings.ARTICLES_BATCH_SIZE,
-            page_size=settings.ARTICLES_BATCH_SIZE
-        )
-
-        #logger.info(f'NewsAPI response: {response}')
-
-        return [
-            NewsAPIModel(**article).to_base()
-            for article in response.get('articles',[])
-        ]
-    
-
-    @handle_article_fetcing
-    def fetch_from_newsdataapi(self) -> List[Dict]:
-        '''fetch news fomr newsdataapi'''
-        response = self._newsdataapi.news_api(
-            q= settings.NEWS_TOPIC,
-            language='en',
-            size = settings.ARTICLES_BATCH_SIZE
-        )
-
-        logger.info(f'NewsDataAPI response: {response}')
-
-        return [
-            NewDataioModel(**article).to_base()
-            for article in response.get('results',[])
-        ]
+       pass
 
     @handle_article_fetcing
     def fetch_from_techcrunch(self) -> List[Dict]:
@@ -133,10 +96,18 @@ class NewsFetcher:
         return [ArtsModel(**article).to_base()
                 for article in fetch_art_tech_articles(settings.ARTS_URL)]
     
+    @handle_article_fetcing
+    def fetch_from_cbs(self) -> List[Dict]:
+        '''fetch news from arise'''
+        return [CbsModel(**article).to_base()
+                for article in fetch_cbs_articles(settings.CBS_URL)]
+    
     @property
     def sources(self) -> List[callable] :
         '''List of news fetching functions'''
-        return [#self.fetch_from_newsapi,#self.fetch_from_newsdataapi,
-                self.fetch_from_techcrunch,self.fetch_from_theverge,
-                self.fetch_from_channelstv,self.fetch_from_arise,self.fetch_from_art]
+        return [
+                #self.fetch_from_techcrunch,self.fetch_from_theverge,
+                #self.fetch_from_channelstv,self.fetch_from_arise,
+                #self.fetch_from_art,
+                self.fetch_from_cbs]
 
