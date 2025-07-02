@@ -94,6 +94,4 @@ I built this with a focus on scalability, accuracy, and real-world performance u
 * Scalable system design using containerized components  
 * AI reliability and grounding with RAG architecture  
 
-## 👋 Final Note
 
-This project reflects how I bring together AI + data engineering to build systems that are practical, accurate, and production-ready. It's a clear example of solving a real-world problem using the latest tools in a clean, modular, and scalable way.
