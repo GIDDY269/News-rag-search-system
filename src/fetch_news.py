@@ -4,8 +4,6 @@ import functools
 from typing import Callable, List, Any
 
 
-from newsapi import NewsApiClient
-from newsdataapi import NewsDataApiClient
 from pydantic import ValidationError
 from config.setting import Settings
 from utils.logger import setup_logger
@@ -106,8 +104,7 @@ class NewsFetcher:
     def sources(self) -> List[callable] :
         '''List of news fetching functions'''
         return [
-                #self.fetch_from_techcrunch,self.fetch_from_theverge,
-                #self.fetch_from_channelstv,self.fetch_from_arise,
-                #self.fetch_from_art,
-                self.fetch_from_cbs]
+                self.fetch_from_techcrunch,self.fetch_from_theverge,
+                self.fetch_from_channelstv,self.fetch_from_arise,
+                self.fetch_from_art,self.fetch_from_cbs]
 
